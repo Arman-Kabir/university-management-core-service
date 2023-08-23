@@ -5,6 +5,7 @@ import { AcademicSemester } from "@prisma/client";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 import pick from "../../../shared/pick";
+import { AcademicSemesterFilterAbleFields } from "./academicSemester.constants";
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     const result = await AcademicSemesterService.insertIntoDB(req.body);
@@ -18,7 +19,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     // console.log(req.query);
-    const filters = pick(req.query,['searchTerm','code','startMonth','endMonth']);
+    const filters = pick(req.query,AcademicSemesterFilterAbleFields);
     const options = pick(req.query,['limit','page','sortBy','sortOrder']);
     console.log("filters",filters);
     console.log("options",options);

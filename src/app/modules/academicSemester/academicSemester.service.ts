@@ -1,11 +1,11 @@
-import { AcademicSemester, Prisma, PrismaClient } from "@prisma/client";
+import { AcademicSemester, Prisma } from "@prisma/client";
 import { IGenericResponse } from "../../../interfaces/common";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { IAcademicSemesterFilterRequest } from "./academicSemester.interface";
 import { AcademicSemesterSearchAbleFields } from "./academicSemester.constants";
+import prisma from "../../../shared/prisma";
 
-const prisma = new PrismaClient();
 
 const insertIntoDB = async (academicSemesterData: AcademicSemester): Promise<AcademicSemester> => {
     const result = await prisma.academicSemester.create({
@@ -23,7 +23,9 @@ const getAllFromDB = async (
 
     const { page, limit, skip } = paginationHelpers.calculatePagination(options);
     const { searchTerm, ...filterData } = filters;
-    console.log(filterData,filters);
+
+    // console.log(filterData,filters);
+    console.log(options);
 
     const andConditions = [];
     if (searchTerm) {
@@ -37,11 +39,11 @@ const getAllFromDB = async (
         })
     }
 
-    if(Object.keys(filterData).length>0){
+    if (Object.keys(filterData).length > 0) {
         andConditions.push({
-            AND:Object.keys(filterData).map((key)=>({
-                [key]:{
-                    equals:(filterData as any)[key]
+            AND: Object.keys(filterData).map((key) => ({
+                [key]: {
+                    equals: (filterData as any)[key]
                 }
             }))
         })
@@ -55,6 +57,18 @@ const getAllFromDB = async (
         where: whereConditions,
         skip,
         take: limit,
+        orderBy: options.sortBy && options.sortOrder
+            ? {
+                [options.sortBy]: options.sortOrder
+            } 
+            :{
+                createdAt:'desc'
+            }
+
+
+        // {
+        //     createdAt:'asc' 
+        // }
     });
 
     const total = await prisma.academicSemester.count();
@@ -63,6 +77,7 @@ const getAllFromDB = async (
             total,
             page,
             limit
+
         },
         data: result
     }
