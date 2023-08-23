@@ -17,8 +17,8 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-    console.log(req.query);
-    const filters = pick(req.query,['searchTerm','code','year']);
+    // console.log(req.query);
+    const filters = pick(req.query,['searchTerm','code','startMonth','endMonth']);
     const options = pick(req.query,['limit','page','sortBy','sortOrder']);
     console.log("filters",filters);
     console.log("options",options);
