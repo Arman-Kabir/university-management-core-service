@@ -12,14 +12,22 @@ const insertIntoDB = async (data: AcademicFaculty): Promise<AcademicFaculty> => 
 };
 
 const getAllFromDB = async () => {
-    const result = prisma.academicFaculty.findMany({
+    const result = await prisma.academicFaculty.findMany({
 
     });
 
-    return result;
-    //  {
-    //     data:result
-    // };
+    const total = await prisma.academicFaculty.count();
+
+
+    // return result;
+    return{
+        meta:{
+            total,
+            page:1,
+            limit:10
+        },
+        data: result
+    };
 };
 
 export const AcademicFacultyService = {
