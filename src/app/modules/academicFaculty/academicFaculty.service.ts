@@ -1,4 +1,5 @@
 import { AcademicFaculty, PrismaClient } from "@prisma/client";
+import {  IGenericResponse } from "../../../interfaces/common";
 
 
 const prisma = new PrismaClient();
@@ -11,7 +12,12 @@ const insertIntoDB = async (data: AcademicFaculty): Promise<AcademicFaculty> => 
     return result;
 };
 
-const getAllFromDB = async () => {
+const getAllFromDB = async (
+    filters,
+    options
+):Promise<IGenericResponse<AcademicFaculty[]>> => {
+
+    
     const result = await prisma.academicFaculty.findMany({
 
     });
