@@ -12,7 +12,14 @@ const insertIntoDB = async (data: AcademicDepartment): Promise<AcademicDepartmen
     return result;
 };
 
+const getAllFromDB = async () => {
+    const result = await prisma.academicDepartment.findMany({});
+
+    return result;
+}
+
 
 export const AcademicDepartmentService = {
-    insertIntoDB
+    insertIntoDB,
+    getAllFromDB
 }

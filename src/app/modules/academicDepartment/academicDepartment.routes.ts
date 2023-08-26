@@ -5,6 +5,8 @@ import { AcademicDepartmentValidation } from "./academicDepartment.validation";
 
 const router = express.Router();
 
+router.get('/', AcademicDepartmentController.getAllFromDB)
+
 router.post(
     '/',
     validateRequest(AcademicDepartmentValidation.create),
