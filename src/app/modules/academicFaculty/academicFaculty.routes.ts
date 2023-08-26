@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get('/', AcademicFacultyController.getAllFromDB)
 
+router.get('/:id', AcademicFacultyController.getDataById)
+
 router.post(
     '/',
     validateRequest(AcademicFacultyValidation.create),

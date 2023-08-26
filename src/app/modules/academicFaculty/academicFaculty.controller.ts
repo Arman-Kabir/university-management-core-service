@@ -19,7 +19,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     // console.log(req.query);
-    const filters = pick(req.query,AcademicFacultyFilterAbleFields);
+    const filters = pick(req.query, AcademicFacultyFilterAbleFields);
     const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
     // console.log('filters',filters);
     // console.log('options',options);
@@ -36,8 +36,19 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     })
 });
 
+const getDataById = catchAsync(async (req: Request, res: Response) => {
+    const result = await AcademicFacultyService.getDataById(req.params.id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'AcademicFaculty data fetched successfully',
+        data: result
+    });
+})
+
 
 export const AcademicFacultyController = {
     insertIntoDB,
-    getAllFromDB
+    getAllFromDB,
+    getDataById
 }
