@@ -10,4 +10,6 @@ router.post('/',
     facultyController.insertIntoDB
 )
 
+router.get('/',facultyController.getAllFromDB)
+
 export const facultyRoutes = router;

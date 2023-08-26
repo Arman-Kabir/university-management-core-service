@@ -13,8 +13,14 @@ const insertIntoDB = async (data: Faculty): Promise<Faculty> => {
     return result;
 };
 
-const getAllFromDB = async()=>{
-    const result = 
+const getAllFromDB = async () => {
+    const result = await prisma.faculty.findMany({
+        include:{
+            academicDepartment:true,
+            academicFaculty:true
+        }
+    });
+    return result;
 }
 
 
