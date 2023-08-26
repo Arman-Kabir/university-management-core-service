@@ -10,6 +10,7 @@ router.post('/',
     facultyController.insertIntoDB
 )
 
-router.get('/',facultyController.getAllFromDB)
+router.get('/', facultyController.getAllFromDB)
+router.get('/:id', facultyController.getByIdFromDB)
 
 export const facultyRoutes = router;
