@@ -17,20 +17,20 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-    console.log(req.query);
-    const filters = pick(req.query,['searchTerm','title']);
-    const options = pick(req.query,['page','limit','sortBy','sortOrder']);
-    console.log('filters',filters);
-    console.log('options',options);
+    // console.log(req.query);
+    const filters = pick(req.query, ['searchTerm','title']);
+    const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
+    // console.log('filters',filters);
+    // console.log('options',options);
 
 
-    const result = await AcademicFacultyService.getAllFromDB();
+    const result = await AcademicFacultyService.getAllFromDB(filters, options);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'AcademicFaculties fetched successfully',
-        meta:result.meta,
+        meta: result.meta,
         data: result.data
     })
 });
