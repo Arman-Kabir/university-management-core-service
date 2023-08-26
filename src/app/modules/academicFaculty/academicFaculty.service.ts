@@ -21,11 +21,11 @@ const getAllFromDB = async (
     options: IPaginationOptions
 ): Promise<IGenericResponse<AcademicFaculty[]>> => {
 
-    // console.log(filters, options);
+    console.log(filters, options);
     const { page, limit, skip } = paginationHelpers.calculatePagination(options);
     const { searchTerm, ...filterData } = filters;
 
-    console.log(filterData);
+    // console.log(filterData);
 
     const andConditions = [];
 
@@ -40,11 +40,11 @@ const getAllFromDB = async (
         })
     }
 
-    if(Object.keys(filterData).length >0){
+    if (Object.keys(filterData).length > 0) {
         andConditions.push({
-            AND:Object.keys(filterData).map((key)=>({
-                [key]:{
-                    equals:(filterData as any)[key]
+            AND: Object.keys(filterData).map((key) => ({
+                [key]: {
+                    equals: (filterData as any)[key]
                 }
             }))
         })
@@ -60,6 +60,15 @@ const getAllFromDB = async (
         where: whereConditions,
         skip,
         take: limit,
+        orderBy: options.sortBy && options.sortOrder
+            ?
+            {
+                [options.sortBy]: options.sortOrder
+            }
+            :
+            {
+               createdAt:'desc' 
+            }
     });
 
     const total = await prisma.academicFaculty.count();
