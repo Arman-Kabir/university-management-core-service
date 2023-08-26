@@ -16,10 +16,20 @@ const getAllFromDB = async () => {
     const result = await prisma.academicDepartment.findMany({});
 
     return result;
+};
+
+const getByIdFromDB = async (id: string): Promise<AcademicDepartment | null> => {
+    const result = await prisma.academicDepartment.findUnique({
+        where: {
+            id
+        }
+    });
+    return result;
 }
 
 
 export const AcademicDepartmentService = {
     insertIntoDB,
-    getAllFromDB
+    getAllFromDB,
+    getByIdFromDB
 }
