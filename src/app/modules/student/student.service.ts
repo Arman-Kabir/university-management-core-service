@@ -10,6 +10,7 @@ import { studentRelationalFields, studentRelationalFieldsMapper, studentSearchab
 import { IStudentFilterRequest } from './student.interface';
 
 const insertIntoDB = async (data: Student): Promise<Student> => {
+    // console.log(':hellp');
     const result = await prisma.student.create({
         data,
         include: {
@@ -107,6 +108,8 @@ const getByIdFromDB = async (id: string): Promise<Student | null> => {
     });
     return result;
 };
+
+// const 
 
 export const StudentService = {
     insertIntoDB,
