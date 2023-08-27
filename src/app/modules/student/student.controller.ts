@@ -40,9 +40,20 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+    const result = await StudentService.updateIntoDB(req.params.id, req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student updated successfully',
+        data: result
+    });
+});
+
 
 export const StudentController = {
     insertIntoDB,
     getAllFromDB,
-    getByIdFromDB
+    getByIdFromDB,
+    updateIntoDB
 };
