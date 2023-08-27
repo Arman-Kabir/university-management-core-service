@@ -18,6 +18,8 @@ router.post(
 router.patch(
     '/:id',
     validateRequest(StudentValidation.update),
-    StudentController.updateIntoDB);
+    StudentController.updateIntoDB)
+
+router.delete('/:id', StudentController.deleteFromDB)
 
 export const studentRoutes = router;

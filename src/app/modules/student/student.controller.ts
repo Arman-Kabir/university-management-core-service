@@ -50,10 +50,21 @@ const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
+    const result = await StudentService.deleteFromDB(req.params.id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student deleted successfully',
+        data: result
+    });
+});
+
 
 export const StudentController = {
     insertIntoDB,
     getAllFromDB,
     getByIdFromDB,
-    updateIntoDB
+    updateIntoDB,
+    deleteFromDB
 };
