@@ -15,6 +15,9 @@ router.post(
     StudentController.insertIntoDB
 );
 
-router.patch('/:id', StudentController.updateIntoDB);
+router.patch(
+    '/:id',
+    validateRequest(StudentValidation.update),
+    StudentController.updateIntoDB);
 
 export const studentRoutes = router;
