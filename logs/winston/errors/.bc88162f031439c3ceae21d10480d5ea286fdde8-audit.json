@@ -124,6 +124,16 @@
             "date": 1693160102968,
             "name": "H:\\Level2\\Mission6\\university-management-core-service\\logs\\winston\\errors\\phu-2023-28-08-00-error.log",
             "hash": "4976af26e48bebca39f389a20defde47304fb729b40e7c0eaed98d425fc20bd9"
+        },
+        {
+            "date": 1693202066548,
+            "name": "H:\\Level2\\Mission6\\university-management-core-service\\logs\\winston\\errors\\phu-2023-28-08-11-error.log",
+            "hash": "8af8df8f40370e353386c1590b1703f8f89507a0673c903787bf7ab35413e658"
+        },
+        {
+            "date": 1693207664059,
+            "name": "H:\\Level2\\Mission6\\university-management-core-service\\logs\\winston\\errors\\phu-2023-28-08-13-error.log",
+            "hash": "7c35379fe3e9ddd7f5c0016b13c590248651f5f309fe0dd27ea1912fa03dfeff"
         }
     ],
     "hashType": "sha256"
