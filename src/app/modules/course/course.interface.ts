@@ -7,3 +7,7 @@ export type ICourseCreateData = {
     }[]
 
 }
+
+export type ICourseFilterRequest={
+    searchTerm?:string | undefined;
+}

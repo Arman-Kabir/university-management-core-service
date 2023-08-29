@@ -1,8 +1,11 @@
-import { Course } from "@prisma/client";
+import { Course, Prisma } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiError";
 import httpStatus from "http-status";
-import { ICourseCreateData } from "./course.interface";
+import { ICourseCreateData, ICourseFilterRequest } from "./course.interface";
+import { IPaginationOptions } from "../../../interfaces/pagination";
+import { paginationHelpers } from "../../../helpers/paginationHelper";
+import { courseSearchAbleFields } from "./course.constants";
 
 const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
     const { preRequisiteCourses, ...courseData } = data;
@@ -53,10 +56,45 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
     };
 };
 
-const getAllFromDB = async () => {
-    const result = await prisma.course.findMany({});
+const getAllFromDB = async (
+    filters: ICourseFilterRequest,
+    options: IPaginationOptions
+) => {
+    const { page, limit, skip } = paginationHelpers.calculatePagination(options);
+    const { searchTerm, ...filterData } = filters;
+
+    const andConditions = [];
+
+    if (searchTerm) {
+        andConditions.push({
+            OR: courseSearchAbleFields.map((field) => ({
+                [field]: {
+                    contains: searchTerm,
+                    mode: 'insensitive'
+                }
+            }))
+        });
+    }
+
+    const whereConditions: Prisma.CourseWhereInput =
+        andConditions.length > 0 ? { AND: andConditions } : {};
+
+    const result = await prisma.course.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy:
+            options.sortBy && options.sortOrder
+                ? { [options.sortBy]: options.sortOrder }
+                : {
+                    createdAt: 'desc'
+                }
+    });
     return result;
 }
+
+
+
 
 const updateOneInDB = async (
     id: string,
@@ -72,8 +110,6 @@ const updateOneInDB = async (
     });
     return result;
 };
-
-
 
 export const CourseService = {
     insertIntoDB,
