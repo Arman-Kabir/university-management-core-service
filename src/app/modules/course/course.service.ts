@@ -6,6 +6,7 @@ import { ICourseCreateData, ICourseFilterRequest } from "./course.interface";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { courseSearchAbleFields } from "./course.constants";
+import { object } from "zod";
 
 const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
     const { preRequisiteCourses, ...courseData } = data;
@@ -76,6 +77,16 @@ const getAllFromDB = async (
         });
     }
 
+    if(Object.keys(filterData).length>0){
+        andConditions.push({
+            AND:Object.keys(filterData).map((key)=>({
+                [key]:{
+                    equals:(filterData as any)[key]
+                }
+            }))
+        })
+    }
+
     const whereConditions: Prisma.CourseWhereInput =
         andConditions.length > 0 ? { AND: andConditions } : {};
 
@@ -90,7 +101,20 @@ const getAllFromDB = async (
                     createdAt: 'desc'
                 }
     });
-    return result;
+
+    const total = await prisma.course.count({
+        where:whereConditions
+    })
+
+
+    return {
+        meta:{
+            total,
+            page,
+            limit 
+        },
+        data:result
+    };
 }
 
 
