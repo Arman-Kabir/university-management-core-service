@@ -12,8 +12,8 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
             data: courseData
         });
 
-        if(!result){
-            throw new ApiError(httpStatus.BAD_REQUEST,"Unable to create course")
+        if (!result) {
+            throw new ApiError(httpStatus.BAD_REQUEST, "Unable to create course")
         }
 
         if (preRequisiteCourses && preRequisiteCourses.length > 0) {
@@ -31,20 +31,20 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
     });
 
 
-    if(newCourse){
+    if (newCourse) {
         const responseData = await prisma.course.findUnique({
-            where:{
-                id:newCourse.id
+            where: {
+                id: newCourse.id
             },
-            include:{
-                preRequisite:{
-                    include:{
-                        preRequisite:true,
+            include: {
+                preRequisite: {
+                    include: {
+                        preRequisite: true,
                     }
                 },
-                preRequisiteFor:{
-                    include:{
-                        course:true
+                preRequisiteFor: {
+                    include: {
+                        course: true
                     }
                 }
             }
@@ -53,6 +53,30 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
     };
 };
 
+const getAllFromDB = async () => {
+    const result = await prisma.course.findMany({});
+    return result;
+}
+
+const updateOneInDB = async (
+    id: string,
+    payload: ICourseCreateData
+): Promise<Course | null> => {
+
+    const { preRequisiteCourses, ...courseData } = payload;
+    const result = await prisma.course.update({
+        where: {
+            id
+        },
+        data: courseData
+    });
+    return result;
+};
+
+
+
 export const CourseService = {
-    insertIntoDB
+    insertIntoDB,
+    getAllFromDB,
+    updateOneInDB
 }
