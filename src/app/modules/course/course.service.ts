@@ -91,6 +91,18 @@ const getAllFromDB = async (
         andConditions.length > 0 ? { AND: andConditions } : {};
 
     const result = await prisma.course.findMany({
+        include:{
+            preRequisite:{
+                include:{
+                    preRequisite:true
+                }
+            },
+            preRequisiteFor:{
+                include:{
+                    course:true
+                }
+            }
+        },
         where: whereConditions,
         skip,
         take: limit,
