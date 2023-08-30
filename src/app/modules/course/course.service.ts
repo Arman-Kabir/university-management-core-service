@@ -6,7 +6,6 @@ import { ICourseCreateData, ICourseFilterRequest } from "./course.interface";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { courseSearchAbleFields } from "./course.constants";
-import { object } from "zod";
 
 const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
     const { preRequisiteCourses, ...courseData } = data;
@@ -130,21 +129,32 @@ const getAllFromDB = async (
 }
 
 
-
-
 const updateOneInDB = async (
     id: string,
     payload: ICourseCreateData
 ): Promise<Course | null> => {
 
     const { preRequisiteCourses, ...courseData } = payload;
-    const result = await prisma.course.update({
-        where: {
-            id
-        },
-        data: courseData
+    
+    await prisma.$transaction(async(transactionClient)=>{
+        const result = await transactionClient.course.update({
+            where:{
+                id 
+            },
+            data:courseData
+        })
+        if(!result){
+            throw new ApiError(httpStatus.BAD_REQUEST,"Unable to update course")
+        }
+
+        if(preRequisiteCourses && preRequisiteCourses.length >0){
+            const deletePrerequisite = preRequisiteCourses.filter(
+                (coursePrerequisite) => coursePrerequisite.courseId && coursePrerequisite.isDeleted
+            )
+            console.log(deletePrerequisite);
+        }
     });
-    return result;
+
 };
 
 export const CourseService = {
