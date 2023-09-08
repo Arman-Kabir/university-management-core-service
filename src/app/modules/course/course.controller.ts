@@ -29,7 +29,7 @@ const getAllFromDB = catchAsync(async(req: Request, res: Response)=>{
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Course updated successfully',
+        message: 'Course fetched successfully',
         data: result
     });
 });

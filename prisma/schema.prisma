@@ -102,6 +102,7 @@ model Faculty {
 
   academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
   academicFacultyId String
+  courses     CourseFaculty[]
 
   @@map("faculties")
 }
@@ -130,14 +131,15 @@ model Room {
 }
 
 model Course {
-  id                   String                 @id @default(uuid())
-  title                String
-  code                 String
-  credits              Int                    @default(0)
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt
-  preRequisite CourseToPreRequisite[] @relation("CourseToPrerequisite")
+  id              String                 @id @default(uuid())
+  title           String
+  code            String
+  credits         Int                    @default(0)
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  preRequisite    CourseToPreRequisite[] @relation("CourseToPrerequisite")
   preRequisiteFor CourseToPreRequisite[] @relation("PrerequisiteToCourse")
+  faculties   CourseFaculty[]
 
   @@map("courses")
 }
@@ -147,7 +149,17 @@ model CourseToPreRequisite {
   preRequisiteId String
 
   course       Course @relation(fields: [courseId], references: [id], name: "CourseToPrerequisite")
-  preRequisite Course @relation(fields: [preRequisiteId], references: [id],name:"PrerequisiteToCourse")
+  preRequisite Course @relation(fields: [preRequisiteId], references: [id], name: "PrerequisiteToCourse")
 
   @@id([courseId, preRequisiteId])
+}
+
+model CourseFaculty {
+  courseId  String
+  course    Course  @relation(fields: [courseId], references: [id])
+  facultyId String
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
+
+  @@id([courseId, facultyId])
+  @@map("course_faculties")
 }
